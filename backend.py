@@ -31,7 +31,7 @@ def category(a):
 def main():
   category("business")
   category("sports")
-  category("tech")
+  category("technology")
 
 
 #Paywall sites
