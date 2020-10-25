@@ -11,19 +11,26 @@ newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
 
 @app.route("/", methods = ["POST", "GET"])
 def home():
-  return render_template("index.html")
   if request.method == "POST":
-    user = request.form["query"]
-    temp = data (user, "", False)
+    #request.form["search"]
+    #request.form.getlist("categories")
+    #if "paywall" in request.form:
+    blockPaywall = False
+    if "paywall" in request.form:
+      blockPaywall = True
+
+    temp = data (request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
   else:
-    temp = data("entertainment, sports, technology", "", False)
+    return render_template("index.html")
+    temp = data(["entertainment", "sports", "technology"], "", False)
   
   return temp
 
 def data(category, search, paywall):
-  temp = search(str(category), str(search), bool(paywall))
+  temp = {}
+  for i in category:
+    b += search(str(i), search, paywall)
   out = ""
-  print (temp)
   for i in temp["articles"]:
     out += render_template("index.html", content = i["title"])
   return out
@@ -48,11 +55,11 @@ def noPay(a):
 
 #returns all headlines in a given category
 
-def search(cat, key, nope):
-  b = newsapi.get_top_headlines( 
-  q = key, category=cat,language='en',country='us')
-  c = payInfo(b)
-  if (nope):
+def search(cat, search, blockPaywall):
+  request = newsapi.get_top_headlines( 
+  q = search, category=cat,language='en',country='us')
+  c = payInfo(request)
+  if blockPaywall:
     return noPay(c)
 
   return c
@@ -129,3 +136,4 @@ if __name__ == "__main__":  # Makes sure this is the main process
 		port=random.randint(2000, 9000),  # Randomly select the port the machine hosts on.
     debug = True
 	)
+
