@@ -12,6 +12,7 @@ newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
 @app.route("/", methods = ["POST", "GET"])
 def home():
   if request.method == "POST":
+    return data(["business"], "", True)
     #request.form["search"]
     #request.form.getlist("categories")
     #if "paywall" in request.form:
@@ -19,50 +20,50 @@ def home():
     if "paywall" in request.form:
       blockPaywall = True
 
-    temp = data (request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
+    return str(data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall))
   else:
     return render_template("index.html")
     temp = data(["entertainment", "sports", "technology"], "", False)
   
-  return temp
+  return render_template("index.html", content = temp)
 
 def data(category, search, paywall):
   temp = {}
   for i in category:
-    b += search(str(i), search, paywall)
-  out = ""
-  for i in temp["articles"]:
-    out += render_template("index.html", content = i["title"])
-  return out
+    temp.update(find(i, search, paywall)) #search for 
+  
+  return temp
 
 
 #modify JSON or headline to include paywall info
 def payInfo(a):
   for i in a["articles"]:
     key = i["source"]["name"] #source we are checking
-    toAdd = paywall.get(key, False)
+    toAdd = paywall.get(key, False) #if it's in our list of paywall sites we will add True, if not False
     i["paywall"] = toAdd
 
   return a
 
 
-#take JSON of headlines, return all that aren't behind a paywall
+#take JSON (dict) of headlines, return all that aren't behind a paywall
 def noPay(a):
+  newDict = {"articles": []}
   for i in a["articles"]:
-    if i["paywall"]:
-      a.pop(i)
-  return a
+    if not i["paywall"]:
+      print (i)
+      newDict["articles"].append(i)
 
-#returns all headlines in a given category
+  return newDict
 
-def search(cat, search, blockPaywall):
-  request = newsapi.get_top_headlines( 
-  q = search, category=cat,language='en',country='us')
-  c = payInfo(request)
+
+#api call
+def find(cat, search, blockPaywall):
+  request = newsapi.get_top_headlines( q = search, category=cat,language='en',country='us')
+  withPaywall = payInfo(request) #add paywall info to dict 
   if blockPaywall:
-    return noPay(c)
+    return noPay(withPaywall) #deletes all entries that have paywall
 
-  return c
+  return request
 
 
 
@@ -130,10 +131,11 @@ paywall = {"The Advertiser": True,
 }
 
 
-if __name__ == "__main__":  # Makes sure this is the main process
+if __name__ == "__main__":  #Flask stuff
 	app.run(# Starts the site
 		host='0.0.0.0',  # Establishes the host, required for repl to detect the site
 		port=random.randint(2000, 9000),  # Randomly select the port the machine hosts on.
     debug = True
 	)
+
 
