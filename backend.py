@@ -1,12 +1,34 @@
-# pip install newsapi-python
 import json
-from flask import Flask
+import random
+from flask import Flask, render_template, request
+
 app = Flask(__name__)
+
+
 from newsapi.newsapi_client import NewsApiClient
 newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
 
 
-@app.route('/')
+@app.route("/", methods = ["POST", "GET"])
+def home():
+  return render_template("index.html")
+  if request.method == "POST":
+    user = request.form["query"]
+    temp = data (user, "", False)
+  else:
+    temp = data("entertainment, sports, technology", "", False)
+  
+  return temp
+
+def data(category, search, paywall):
+  temp = search(str(category), str(search), bool(paywall))
+  out = ""
+  print (temp)
+  for i in temp["articles"]:
+    out += render_template("index.html", content = i["title"])
+  return out
+
+
 #modify JSON or headline to include paywall info
 def payInfo(a):
   for i in a["articles"]:
@@ -19,22 +41,26 @@ def payInfo(a):
 
 #take JSON of headlines, return all that aren't behind a paywall
 def noPay(a):
+  for i in a["articles"]:
+    if i["paywall"]:
+      a.pop(i)
   return a
 
 #returns all headlines in a given category
-def category(a):
-  b = newsapi.get_top_headlines( category=a,language='en',country='us')
-  return payInfo(b)
+
+def search(cat, key, nope):
+  b = newsapi.get_top_headlines( 
+  q = key, category=cat,language='en',country='us')
+  c = payInfo(b)
+  if (nope):
+    return noPay(c)
+
+  return c
 
 
 
-def main():
-  category("business")
-  category("sports")
-  category("technology")
 
-
-#Paywall sites
+#List of paywall sites
 paywall = {"The Advertiser": True,
 "Adweek": True,
 "Arabian Business": True,
@@ -95,4 +121,11 @@ paywall = {"The Advertiser": True,
 "The Age": True,
 "The Athletic": True,
 }
-main()
+
+
+if __name__ == "__main__":  # Makes sure this is the main process
+	app.run(# Starts the site
+		host='0.0.0.0',  # Establishes the host, required for repl to detect the site
+		port=random.randint(2000, 9000),  # Randomly select the port the machine hosts on.
+    debug = True
+	)
