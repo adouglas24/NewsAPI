@@ -12,27 +12,22 @@ newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
 @app.route("/", methods = ["POST", "GET"])
 def home():
   if request.method == "POST":
-    return data(["business"], "", True)
-    #request.form["search"]
-    #request.form.getlist("categories")
-    #if "paywall" in request.form:
     blockPaywall = False
     if "paywall" in request.form:
       blockPaywall = True
 
-    return str(data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall))
+    temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
   else:
-    return render_template("index.html")
     temp = data(["entertainment", "sports", "technology"], "", False)
   
   return render_template("index.html", content = temp)
 
 def data(category, search, paywall):
-  temp = {}
+  temp = []
   for i in category:
-    temp.update(find(i, search, paywall)) #search for 
+    temp.append(find(i, search, paywall)) #search for 
   
-  return temp
+  return json.dumps(temp)
 
 
 #modify JSON or headline to include paywall info
