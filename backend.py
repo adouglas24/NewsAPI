@@ -143,7 +143,7 @@ def outFormat(temp):
   
   return out
 
-#List of paywall sites
+#List of paywall sites (dict has more efficient lookup than set)
 paywall = {"The Advertiser": True,
 "Adweek": True,
 "Arabian Business": True,
