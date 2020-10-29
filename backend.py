@@ -1,4 +1,3 @@
-import json
 import random
 from flask import Flask, render_template, request
 
@@ -206,11 +205,5 @@ paywall = {"The Advertiser": True,
 }
 
 
-if __name__ == "__main__":  #Flask stuff
-	app.run(# Starts the site
-		host='0.0.0.0',  # Establishes the host, required for repl to detect the site
-		port=random.randint(2000, 9000),  # Randomly select the port the machine hosts on.
-    debug = False
-	)
 
 
