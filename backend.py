@@ -19,13 +19,44 @@ def home():
     temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
   else:
     temp = data(["entertainment", "sports", "technology"], "", False)
+
   Names = nameList(temp)
   Headlines = headLineList(temp)
   Images = images(temp)
   Paywalls = paywallList(temp)
+  URL = urlList(temp)
+  Date = dateList(temp)
   
-  return render_template("index.html", namelist = Names, headList = Headlines, imageList = Images, payList = Paywalls)
+  return render_template("index.html", tableList = combine(Names, Headlines, URL, Images, Paywalls, Date))
 
+def combine(Names, Headlines, URL, Images, Paywalls, Date):
+  out = []
+  for i in range(len(Names)):
+    temp =[]
+    temp.append(Names[i])
+    temp.append(Headlines[i])
+    temp.append(URL[i])
+    temp.append(Images[i])
+    temp.append(Paywalls[i])
+    temp.append(Date[i])
+    out.append(temp)
+  return out
+
+def dateList(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      dateTemp = str(y["publishedAt"])
+      dateTemp = dateTemp[0:9]
+      out.append(dateTemp)
+  return out
+
+def urlList(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      out.append(y["url"])
+  return out
 
 def nameList(temp):
   out = []
@@ -46,14 +77,20 @@ def images(temp):
   out = []
   for x in temp:
     for y in x["articles"]:
-      out.append(y["urlToImage"])
+      if str(y["urlToImage"]) == "None":
+        out.append("https://via.placeholder.com/128/004879/FFFFFF/?text=NoImage")
+      else:
+        out.append(y["urlToImage"])
   return out
 
 def paywallList(temp):
   out = []
   for x in temp:
     for y in x["articles"]:
-      out.append(y["paywall"])
+      if y["paywall"]:
+        out.append("Yes")
+      else:
+        out.append("No!")
   return out  
 
 def data(category, search, paywall):

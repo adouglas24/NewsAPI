@@ -43,20 +43,26 @@
 
   <button type="Search" class="btn btn-primary">Search</button>
 </form>
-{{namelist}} headList  imageList  payList 
+
 <table class="table table-striped table-dark">
   <thead>
     <tr>
       <th scope="col">Source</th>
-      <th scope="col">Headline</th>
+      <th scope="col">Article</th>
       <th scope="col">Image</th>
       <th scope="col">Paywall?</th>
+      <th scope="col">Date Published</th>
 		</tr>
-    <tr>
-    {% for name in namelist %}
-    <th> {{name}} </th>
+    {% for sub in tableList %}
+        <tr>
+    <th> {{sub[0]}} </th>
+    <th>  <a href={{sub[2]}} target="_blank">{{sub[1]}}</a></th>
+    <th> <img src={{sub[3]}} alt="Site Image" width="128" height="128"> </th>
+    <th> {{sub[4]}} </th>
+    <th> {{sub[5]}} </th>
+        </tr>
       {% endfor %}
-    </tr>
+
   </thead>
   <tbody id = "myTable">
 
