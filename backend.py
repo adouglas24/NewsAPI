@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 from newsapi.newsapi_client import NewsApiClient
-newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
+newsapi = NewsApiClient(api_key='78b9d599c4f94f8fa3afb1a5458928d6')
 
 
 @app.route("/", methods = ["POST", "GET"])
@@ -19,14 +19,49 @@ def home():
     temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
   else:
     temp = data(["entertainment", "sports", "technology"], "", False)
+  Names = nameList(temp)
+  Headlines = headLineList(temp)
+  Images = images(temp)
+  Paywalls = paywallList(temp)
   
-  return render_template("index.html", content = temp)
+  return render_template("index.html", namelist = Names, headList = Headlines, imageList = Images, payList = Paywalls)
+
+
+def nameList(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      out.append(y['source']["name"])
+
+  return out
+
+def headLineList(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      out.append(y["title"])
+  return out
+
+def images(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      out.append(y["urlToImage"])
+  return out
+
+def paywallList(temp):
+  out = []
+  for x in temp:
+    for y in x["articles"]:
+      out.append(y["paywall"])
+  return out  
 
 def data(category, search, paywall):
   temp = []
   for i in category:
     temp.append(find(i, search, paywall)) #search for 
   
+  return temp
   return json.dumps(temp)
 
 
@@ -42,13 +77,12 @@ def payInfo(a):
 
 #take JSON (dict) of headlines, return all that aren't behind a paywall
 def noPay(a):
-  newDict = {"articles": []}
+  out = []
   for i in a["articles"]:
     if not i["paywall"]:
-      print (i)
-      newDict["articles"].append(i)
+      out.append(i)
 
-  return newDict
+  return {"articles": out}
 
 
 #api call
@@ -61,7 +95,12 @@ def find(cat, search, blockPaywall):
   return request
 
 
-
+def outFormat(temp):
+  out = []
+  for i in temp:
+    out.append(temp["articles"])
+  
+  return out
 
 #List of paywall sites
 paywall = {"The Advertiser": True,
@@ -130,7 +169,7 @@ if __name__ == "__main__":  #Flask stuff
 	app.run(# Starts the site
 		host='0.0.0.0',  # Establishes the host, required for repl to detect the site
 		port=random.randint(2000, 9000),  # Randomly select the port the machine hosts on.
-    debug = True
+    debug = False
 	)
 
 
