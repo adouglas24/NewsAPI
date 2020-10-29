@@ -1,4 +1,0 @@
-newsapi
-newsapi-python
-flask
-gunicorn
