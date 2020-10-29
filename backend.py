@@ -15,21 +15,23 @@ def home():
     blockPaywall = False
     if "paywall" in request.form:
       blockPaywall = True
-
-    temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
+    if str(request.form["search"]) != "":
+      temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
+    else:
+      temp = data(request.form.getlist("categories"), "", blockPaywall)
   else:
-    temp = data(["entertainment", "sports", "technology"], "", False)
+    temp = data(["entertainment", "sports", "technology"],"", False)
 
+
+  return render_template("index.html", tableList = combine(temp))
+
+def combine(temp):
   Names = nameList(temp)
   Headlines = headLineList(temp)
   Images = images(temp)
   Paywalls = paywallList(temp)
   URL = urlList(temp)
   Date = dateList(temp)
-  
-  return render_template("index.html", tableList = combine(Names, Headlines, URL, Images, Paywalls, Date))
-
-def combine(Names, Headlines, URL, Images, Paywalls, Date):
   out = []
   for i in range(len(Names)):
     temp =[]
@@ -47,7 +49,8 @@ def dateList(temp):
   for x in temp:
     for y in x["articles"]:
       dateTemp = str(y["publishedAt"])
-      dateTemp = dateTemp[0:9]
+      end = dateTemp.index("T")
+      dateTemp = dateTemp[0:end]
       out.append(dateTemp)
   return out
 
@@ -78,7 +81,7 @@ def images(temp):
   for x in temp:
     for y in x["articles"]:
       if str(y["urlToImage"]) == "None":
-        out.append("https://via.placeholder.com/128/004879/FFFFFF/?text=NoImage")
+        out.append("https://via.placeholder.com/128/343a40/FFFFFF/?text=No%20Image")
       else:
         out.append(y["urlToImage"])
   return out
@@ -99,7 +102,8 @@ def data(category, search, paywall):
     temp.append(find(i, search, paywall)) #search for 
   
   return temp
-  return json.dumps(temp)
+
+
 
 
 #modify JSON or headline to include paywall info
@@ -124,7 +128,7 @@ def noPay(a):
 
 #api call
 def find(cat, search, blockPaywall):
-  request = newsapi.get_top_headlines( q = search, category=cat,language='en',country='us')
+  request = newsapi.get_top_headlines( q = search, category=cat,language='en', country='us')
   withPaywall = payInfo(request) #add paywall info to dict 
   if blockPaywall:
     return noPay(withPaywall) #deletes all entries that have paywall
