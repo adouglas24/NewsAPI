@@ -223,7 +223,7 @@ def data(category, search, paywall):
     Parameters
     ----------
     category : list
-        List of all categories to seawrch
+        List of all categories to search
     search : str
         Search query (or "" if none input)
     paywall : bool
@@ -237,59 +237,50 @@ def data(category, search, paywall):
     """
     temp = []
     for i in category:
-        temp.append(find(i, search, paywall))  #search for
+        temp.append(find(i, search, paywall))  
 
     return temp
 
 
-#modify JSON or headline to include paywall info
 def payInfo(a):
     """
-    Summary line.
-
-    Extended description of function.
+    Adds bool value for whether the source is expected to have a paywall to the dict returned from NewsAPI
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    a : dict
+        Result returned from API call
 
     Returns
     -------
-    int
-        Description of return value
+    dict
+        API call result with a "paywall" entry
 
     """
     for i in a["articles"]:
-        key = i["source"]["name"]  #source we are checking
+        key = i["source"]["name"]  
         toAdd = paywall.get(
             key, False
-        )  #if it's in our list of paywall sites we will add True, if not False
+        ) 
         i["paywall"] = toAdd
 
     return a
 
 
-#take JSON (dict) of headlines, return all that aren't behind a paywall
+
 def noPay(a):
     """
-    Summary line.
-
-    Extended description of function.
+    If the user doesn't want to see paywall information, this removes all results thought to have paywalls.
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    a : dict
+        Result returned from API call with paywall information added
 
     Returns
     -------
-    int
-        Description of return value
+    dict
+        Dict containing list of articles not behind a paywall
 
     """
     out = []
@@ -300,28 +291,28 @@ def noPay(a):
     return {"articles": out}
 
 
-#api call
-def find(cat, search, blockPaywall):
-    """
-    Summary line.
 
-    Extended description of function.
+def find(categ, search, blockPaywall):
+    """
+    Completes API call for specified query.
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    category : string
+        Category to search
+    search : str
+        Search query (or "" if none input)
+    blockPaywall : bool
+        True if the user wants to block paywall sites
 
     Returns
     -------
-    int
-        Description of return value
+    dict
+        Results of API call and paywall modification
 
     """
     request = newsapi.get_top_headlines(
-        q=search, category=cat, language='en', country='us')
+        q=search, category=categ, language='en', country='us')
     withPaywall = payInfo(request)  #add paywall info to dict
     if blockPaywall:
         return noPay(withPaywall)  #deletes all entries that have paywall
