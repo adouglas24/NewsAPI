@@ -15,7 +15,8 @@ def home():
     Returns
     -------
     html
-        Homepage with api data
+        Defult: top 20 entertainment, sports, and technology news articles
+        After query input: Homepage with api call results
 
     """
     if request.method == "POST":
@@ -33,19 +34,17 @@ def home():
 
 def combine(temp):
     """
-    Make api output easy to me 
+    Makes api output html friendly
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    2-d list
+        List of lists containing each output line to be put in the results table
 
     """
     Names = nameList(temp)
@@ -70,21 +69,17 @@ def combine(temp):
 
 def dateList(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all dates from the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    list
+        All dates from the API results, formatted for output
 
     """  
     out = []
@@ -101,21 +96,17 @@ def dateList(temp):
 
 def urlList(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all urls from the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    list
+        All urls from the API results
 
     """  
     out = []
@@ -128,23 +119,18 @@ def urlList(temp):
     
 def nameList(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all sours names from the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
-
-    """  
+    list
+        All source names from the API results
+    """   
     out = []
     for x in temp:
         for y in x["articles"]:
@@ -155,21 +141,17 @@ def nameList(temp):
 
 def headLineList(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all headlines from the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    list
+        All headlines from the API results,
 
     """  
     out = []
@@ -182,21 +164,17 @@ def headLineList(temp):
 
 def images(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all image urls from the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    list
+        All image urls from the API results. If there was no image url, includes default placeholder image
 
     """  
     out = []
@@ -214,52 +192,48 @@ def images(temp):
 
 def paywallList(temp):
     """
-    Summary line.
-
-    Extended description of function.
+    Returns a list of all paywall information pertaining to the API call(s)
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
+    temp : array of dicts
+        API call(s) results
 
     Returns
     -------
-    int
-        Description of return value
+    list
+        All paywall information pertaining to the API results, formatted for output
 
-    """
+    """  
     out = []
     for x in temp:
         for y in x["articles"]:
             if y["paywall"]:
                 out.append("Yes")
             else:
-                out.append("No!")
+                out.append("None spotted!")
 
     return out
 
 
 def data(category, search, paywall):
     """
-    Summary line.
-
-    Extended description of function.
+    Calls API function for each category queried 
 
     Parameters
     ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
-
+    category : list
+        List of all categories to seawrch
+    search : str
+        Search query (or "" if none input)
+    paywall : bool
+        True if the user wants to block paywall sites
+      
     Returns
     -------
-    int
-        Description of return value
-
+    List of dicts
+      API call(s) results
+        
     """
     temp = []
     for i in category:
