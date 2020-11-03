@@ -237,7 +237,7 @@ def data(category, search, paywall):
     """
     temp = []
     for i in category:
-        temp.append(find(i.tolower(), search, paywall))  
+        temp.append(find(i.lower(), search, paywall))  
 
     return temp
 
