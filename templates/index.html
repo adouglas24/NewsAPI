@@ -18,12 +18,14 @@
   :root{
     --background-color: #e6f5fc;
     --font-color: black;
-    --table-color: #868e96
+    --table-color: #868e96;
+    --link-color: #004879;
   }
   [data-theme="dark"] {
     --background-color: #004879;
     --font-color: white;
     --table-color: #343a40;
+    --link-color: #e6f5fc;
    }
   .table{
     background-color: var(--table-color);
@@ -37,6 +39,9 @@
   }
   .form-check{
     color: black;
+  }
+  a:link{
+    color: var(--link-color);
   }
 </style>
 
@@ -91,11 +96,11 @@
       </tr>
       {% for sub in tableList %}
           <tr>
-      <th> {{sub[0]}} </th>
-      <th>  <a href={{sub[2]}} target="_blank">{{sub[1]}}</a></th>
-      <th> <img src={{sub[3]}} alt="Site Image" > </th>
-      <th> {{sub[4]}} </th>
-      <th> {{sub[5]}} </th>
+      <td>  {{sub[0]}} </td>
+      <td> <b> <a href={{sub[2]}} target="_blank">{{sub[1]}}</a> </b></td>
+      <td> <img src={{sub[3]}} alt="Site Image" > </td>
+      <td> {{sub[4]}} </td>
+      <td> {{sub[5]}} </td>
           </tr>
         {% endfor %}
     </thead>
