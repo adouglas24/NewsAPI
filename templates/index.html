@@ -1,11 +1,12 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-</script>
 <html lang="en" class="full-height">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css')}}">
+
 <head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	 crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css')}}">
 	<title>News Search</title>
 
 </head>
@@ -13,73 +14,110 @@
 	img {
 		width: 128;
 		height: auto;
-	}
-
+  }
+  :root{
+    --background-color: #e6f5fc;
+    --font-color: black;
+    --table-color: #868e96
+  }
+  [data-theme="dark"] {
+    --background-color: #004879;
+    --font-color: white;
+    --table-color: #343a40;
+   }
+  .table{
+    background-color: var(--table-color);
+    color: var(--font-color);
+    width: 100%;
+    border: 1px solid black;
+  }
 	body {
-		background-color: #DA9F93;
-	}
+		background-color: var(--background-color);
+    color: var(--font-color);
+  }
+  .form-check{
+    color: black;
+  }
 </style>
 
 <body>
-
-	<nav class="navbar navbar-expand-lg navbar-dark bg-light static-top">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-white static-top">
 		<div class="container">
 			<a class="navbar-brand" href="#">
 				<image src="{{ url_for('static', filename = 'logo.png')}}" width="100" height="40">
-			</a>
+      </a>
+      
+      <div class = "form-check">
+        <label class="darkMode-switch" for="checkbox">
+            <input type="checkbox" id="checkbox"/>
+      </label>Dark Mode?
+    </div>
+
 		</div>
 	</nav>
 
-	<div class="p-3 mb-2  text-white">
+	<div class="p-3 mb-2 ">
 
 		<form action="#" method="post">
 			<div class="form-group">
 				<label for="search">Search</label>
-    <input type="text" name = "search" class="form-control" id="search" placeholder="e.g. Baseball News" >
-  </div>
+        <input type="text" name = "search" class="form-control" id="search" placeholder="e.g. Baseball News" >
 
-  <div class="form-group">
-    <label for="categories">Categories (select 1-3, cmd/ctrl click for multiple)</label>
-    <select multiple class="form-control" name = "categories" id="categories" required>
-      <option selected>Entertainment</option>
-      <option selected>Sports</option>
-      <option selected>Technology</option>
-    </select>
-  </div>
+        <label for="categories">Categories (select 1-3, cmd/ctrl click for multiple)</label>
+        <select multiple class="form-control" name = "categories" id="categories" required>
+          <option selected>Entertainment</option>
+          <option selected>Sports</option>
+          <option selected>Technology</option>
+        </select>
 
-<div class="form-group">
-  <div class="custom-control custom-switch">
-  <input type="checkbox" name = "paywall" class="custom-control-input" id="paywall">
-  <label class="custom-control-label" for="paywall">Block sites that may include paywalls</label>
-</div>
- </div>
-  <button type="Search" class="btn btn-primary">Search</button>
-</form>
 
-<table class="table table-striped table-dark">
-  <thead>
-    <tr>
-      <th scope="col">Source</th>
-      <th scope="col">Article</th>
-      <th scope="col">Image</th>
-      <th scope="col">Paywall?</th>
-      <th scope="col">Date Published</th>
-		</tr>
-    {% for sub in tableList %}
-        <tr>
-    <th> {{sub[0]}} </th>
-    <th>  <a href={{sub[2]}} target="_blank">{{sub[1]}}</a></th>
-    <th> <img src={{sub[3]}} alt="Site Image" > </th>
-    <th> {{sub[4]}} </th>
-    <th> {{sub[5]}} </th>
-        </tr>
-      {% endfor %}
-  </thead>
-</table>
+        <div class="custom-control custom-switch">
+          <input type="checkbox" name = "paywall" class="custom-control-input" id="paywall">
+          <label class="custom-control-label" for="paywall">Block sites that may include paywalls</label>
+        </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <button type="Search" class="btn btn-primary">Search</button>
+      </div>
+    </form>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Source</th>
+        <th scope="col">Article</th>
+        <th scope="col">Image</th>
+        <th scope="col">Paywall?</th>
+        <th scope="col">Date Published</th>
+      </tr>
+      {% for sub in tableList %}
+          <tr>
+      <th> {{sub[0]}} </th>
+      <th>  <a href={{sub[2]}} target="_blank">{{sub[1]}}</a></th>
+      <th> <img src={{sub[3]}} alt="Site Image" > </th>
+      <th> {{sub[4]}} </th>
+      <th> {{sub[5]}} </th>
+          </tr>
+        {% endfor %}
+    </thead>
+  </table>
+
+<! Dark mode approach from https://dev.to/ananyaneogi/create-a-dark-light-mode-switch-with-css-variables-34l8>
+  <script>
+    const toggleSwitch = document.querySelector('.darkMode-switch input[type="checkbox"]');
+    function switchTheme(e) {
+        if (e.target.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }    
+    }
+    toggleSwitch.addEventListener('change', switchTheme, false);
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </div>
 
