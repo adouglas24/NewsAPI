@@ -202,7 +202,7 @@ def images(temp):
         for y in x["articles"]:
             if str(y["urlToImage"]) == "None":
                 out.append(
-                    "https://via.placeholder.com/128/343a40/FFFFFF/?text=No%20Image"
+                    "https://via.placeholder.com/128x64/343a40/FFFFFF/?text=No%20Image"
                 )
             else:
                 out.append(y["urlToImage"])
