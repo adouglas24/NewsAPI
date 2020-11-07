@@ -21,7 +21,7 @@ The program first completes News API call(s), based on user input or default set
 
 Once the API call and paywall modification is complete, the progam has a list containing 1-3 dicts each with 0-20 articles. To make the backend work easier, the program then converts this into a list of lists, with each list containing one row of output information. 
 
-Front end details (/templates/index.html)
+Front end details (templates/index.html)
 The list of lists is passed to the backend using flask. The backend primarily uses bootstrap templates, including a heaader (with the Capital One logo, of course), the data input forms, and the output table. Using a for loop, the data passed to the backend is added to the table. After searching, the page is loaded with previous query still in the forms (through a very hacky method of passing the POST variables back to the html through flask). 
 
 
