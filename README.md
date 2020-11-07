@@ -22,10 +22,10 @@ The program first completes News API call(s), based on user input or default set
 Once the API call and paywall modification is complete, the progam has a list containing 1-3 dicts each with 0-20 articles. To make the backend work easier, the program then converts this into a list of lists, with each list containing one row of output information. 
 
 Front end details (/templates/index.html)
-The list of lists is passed to the backend using flask. The backend primarily uses bootstrap templates, including a heaader (with the Capital One logo, of course), the data input forms, and the output table. Using a for loop, the data passed to the backend is added to the table. 
+The list of lists is passed to the backend using flask. The backend primarily uses bootstrap templates, including a heaader (with the Capital One logo, of course), the data input forms, and the output table. Using a for loop, the data passed to the backend is added to the table. After searching, the page is loaded with previous query still in the forms (through a very hacky method of passing the POST variables back to the html through flask). 
 
 
 ## What I learned (the narrative) 
 Coming into this project, I had no experience doing front-end development. My coding experience was limited to creating programs that only needed to be used by myself (or group members). So, in doing this project I learned a ton. I used the technologies I had been told were most intuitive to pick up (flask and html). I began by working on my back-end functionality--making functions that can make a NewsAPI call based on specific queries. Then, I learned how to use flask to setup a basic web app and how to use html and to style said web app. After many YouTube series watched and pages of documentation read, I had a web app that was working--in Repl.it, that is. I learned that getting a web app working on a production server is not quite getting a web app deployed. I learned how to setup my flask project in a virtual environment that would then be compatible with heroku hosting and, finally, I got my site working. 
 
-I now feel comfortable with creating simple web apps and making them actually work, skills that I am thrilled to have learned over these past few weeks. 
+I now feel fairly comfortable creating simple web apps and making them actually work, skills that I am thrilled to have learned over these past few weeks. 
