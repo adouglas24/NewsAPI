@@ -23,20 +23,33 @@ def home():
         blockPaywall = False
         if "paywall" in request.form:
             blockPaywall = True
-        temp = data(request.form.getlist("categories"), str(request.form["search"]), blockPaywall)
+        search = str(request.form["search"])
+        categories = request.form.getlist("categories")
+
+        temp = data(categories, search, blockPaywall)
+
         #values to send back to html
         prevSearch = str(request.form["search"])
         prevPaywall = blockPaywall
         checked = False
         if "checkbox" in request.form:
             checked = True
+        entertainment = "Entertainment" in categories
+        sports = "Sports" in categories
+        technology = "Technology" in categories
     else:
         temp = data(["entertainment", "sports", "technology"], "", False)
+
+        #default form values to send to html
         prevSearch = ""
         prevPaywall = False
         checked = False
+        entertainment = True
+        sports = True
+        technology = True
 
-    return render_template("index.html", tableList=combine(temp), prev = prevSearch, paywallinfo = prevPaywall, check = checked)
+    return render_template("index.html", tableList=combine(temp), 
+    prev = prevSearch, paywallinfo = prevPaywall, check = checked, ent = entertainment, sport = sports, tech = technology)
 
 
 def combine(temp):

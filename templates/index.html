@@ -76,9 +76,24 @@
 
         <label for="categories">Categories (select 1-3, cmd/ctrl click for multiple)</label>
         <select multiple class="form-control" name = "categories" id="categories" required>
+          {% if ent %}
           <option selected>Entertainment</option>
+          {% else %}
+          <option >Entertainment</option>
+          {% endif %}
+
+          {% if sport %}
           <option selected>Sports</option>
+          {% else %}
+          <option >Sports</option>
+          {% endif %}
+
+          {% if tech %}
           <option selected>Technology</option>
+          {% else %}
+          <option >Technology</option>
+          {% endif %}
+
         </select>
 
 
