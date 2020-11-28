@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 from newsapi.newsapi_client import NewsApiClient
-newsapi = NewsApiClient(api_key='78b9d599c4f94f8fa3afb1a5458928d6')
+newsapi = NewsApiClient(api_key='93e43dd8864e4a708e5a764fea244b69')
 
 
 @app.route("/", methods=["POST", "GET"])
